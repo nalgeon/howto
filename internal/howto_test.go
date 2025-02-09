@@ -192,6 +192,49 @@ func Test_answer_no_panic(t *testing.T) {
 	}
 }
 
+func Test_removeFences(t *testing.T) {
+	tests := []struct {
+		name string
+		s    string
+		want string
+	}{
+		{
+			name: "no fences",
+			s:    "test",
+			want: "test",
+		},
+		{
+			name: "single fence",
+			s:    "```test```",
+			want: "```test```",
+		},
+		{
+			name: "fences with text",
+			s:    "```bash\ntest\n```\nafter",
+			want: "test\nafter",
+		},
+		{
+			name: "multiple fences",
+			s:    "before\n```\ntest\n```\nmid\n```\ntest\n```\nafter",
+			want: "before\ntest\nmid\ntest\nafter",
+		},
+		{
+			name: "fences with spaces",
+			s:    "  ```bash\n  test\n  ```\nafter",
+			want: "test\nafter",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := removeFences(tt.s)
+			if got != tt.want {
+				t.Errorf("%s: expected %q, got %q", tt.name, tt.want, got)
+			}
+		})
+	}
+}
+
 func Test_printAnswer(t *testing.T) {
 	t.Run("command and explanation", func(t *testing.T) {
 		out := &bytes.Buffer{}

@@ -53,11 +53,30 @@ func answer(out io.Writer, ask ai.AskFunc, input string, history *History) error
 		return err
 	}
 
+	answer = removeFences(answer)
 	printAnswer(out, answer)
 	history.Add(answer)
 	return nil
 }
 
+// removeFences removes code fences from the answer.
+func removeFences(s string) string {
+	// Exclude the lines with code fences.
+	lines := strings.Split(s, "\n")
+	if len(lines) < 2 {
+		return s
+	}
+	var filtered []string
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if !strings.HasPrefix(line, "```") {
+			filtered = append(filtered, line)
+		}
+	}
+	return strings.Join(filtered, "\n")
+}
+
+// printAnswer prints the answer to the output.
 func printAnswer(out io.Writer, answer string) {
 	command, rest, ok := strings.Cut(answer, "\n")
 	if !ok {
