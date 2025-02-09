@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/nalgeon/howto/ai"
+	"github.com/nalgeon/howto/internal"
+	"github.com/nalgeon/howto/internal/ai"
 )
 
 var (
@@ -16,18 +17,19 @@ var (
 )
 
 func main() {
-	history, err := LoadHistory()
+	history, err := internal.LoadHistory()
 	if err != nil {
 		fmt.Println("ERROR:", err)
 		os.Exit(1)
 	}
 
 	if len(os.Args) < 2 {
-		printUsage(os.Stdout)
+		internal.PrintUsage(os.Stdout)
 		os.Exit(1)
 	}
 
-	err = howto(os.Stdout, ai.Ask, os.Args[1:], history)
+	ver := internal.NewVersion(version, commit, date)
+	err = internal.Howto(os.Stdout, ai.Ask, ver, os.Args[1:], history)
 
 	if err != nil {
 		fmt.Println("ERROR:", err)

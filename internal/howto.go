@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -7,21 +7,20 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/nalgeon/howto/ai"
+	"github.com/nalgeon/howto/internal/ai"
 )
 
 // howto implements the howto command.
 // Uses the given ask function to get an answer from the AI.
 // Prints all output to the given writer.
-func howto(out io.Writer, ask ai.AskFunc, args []string, history *History) error {
+func Howto(out io.Writer, ask ai.AskFunc, ver Version, args []string, history *History) error {
 	input := strings.Join(args, " ")
 
 	var err error
 	switch input {
 	case "-h", "--help":
-		printUsage(out)
+		PrintUsage(out)
 	case "-v", "--version":
-		ver := versionString()
 		printVersion(out, ver, ai.Conf, history)
 	case "-run":
 		err = runCommand(out, history)
@@ -109,14 +108,4 @@ func execCommand(command string) (string, error) {
 	}
 
 	return strings.TrimSpace(outb.String()), nil
-}
-
-func versionString() string {
-	var ver string
-	if version == "dev" {
-		ver = commit
-	} else {
-		ver = version
-	}
-	return ver + " (" + date + ")"
 }

@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -11,14 +11,16 @@ import (
 	"testing"
 )
 
-func Test_howto(t *testing.T) {
+func TestHowto(t *testing.T) {
+	ver := NewVersion("1.2.3", "commit", "now")
+
 	t.Run("help", func(t *testing.T) {
 		out := &bytes.Buffer{}
 		ask := func(history []string) (string, error) {
 			return "", nil
 		}
 		history := &History{}
-		err := howto(out, ask, []string{"-h"}, history)
+		err := Howto(out, ask, ver, []string{"-h"}, history)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -33,11 +35,11 @@ func Test_howto(t *testing.T) {
 			return "", nil
 		}
 		history := &History{}
-		err := howto(out, ask, []string{"-v"}, history)
+		err := Howto(out, ask, ver, []string{"-v"}, history)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
-		if !strings.Contains(out.String(), bold("howto")+" head (now)") {
+		if !strings.Contains(out.String(), bold("howto")+" 1.2.3 (now)") {
 			t.Errorf("Expected version string, got %q", out.String())
 		}
 	})
@@ -48,7 +50,7 @@ func Test_howto(t *testing.T) {
 			return "", nil
 		}
 		history := &History{}
-		err := howto(out, ask, []string{"-run"}, history)
+		err := Howto(out, ask, ver, []string{"-run"}, history)
 		if err == nil {
 			t.Fatalf("Expected error, got nil")
 		}
@@ -63,7 +65,7 @@ func Test_howto(t *testing.T) {
 			return "test command\ntest explanation", nil
 		}
 		history := &History{}
-		err := howto(out, ask, []string{"test"}, history)
+		err := Howto(out, ask, ver, []string{"test"}, history)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -81,7 +83,7 @@ func Test_howto(t *testing.T) {
 			return "test command\ntest explanation", nil
 		}
 		history := &History{messages: []string{"test"}}
-		err := howto(out, ask, []string{"+test"}, history)
+		err := Howto(out, ask, ver, []string{"+test"}, history)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -99,7 +101,7 @@ func Test_howto(t *testing.T) {
 			return "", errors.New("test error")
 		}
 		history := &History{}
-		err := howto(out, ask, []string{"test"}, history)
+		err := Howto(out, ask, ver, []string{"test"}, history)
 		if err == nil {
 			t.Fatalf("Expected error, got nil")
 		}
@@ -298,7 +300,7 @@ func Test_execCommand_no_panic(t *testing.T) {
 	}
 }
 
-func Test_howto_integration(t *testing.T) {
+func TestHowto_integration(t *testing.T) {
 	if os.Getenv("SKIP_EXEC_TEST") != "" {
 		t.Skip("Skipping exec test")
 	}
@@ -316,12 +318,12 @@ func Test_howto_integration(t *testing.T) {
 		}
 	}
 
-	// Initialize a new History instance.
+	ver := NewVersion("1.2.3", "commit", "now")
 	history := &History{}
 
 	// Test case 1: Ask a question and check the output.
 	out := &bytes.Buffer{}
-	err := howto(out, ask, []string{"echo", "hello"}, history)
+	err := Howto(out, ask, ver, []string{"echo", "hello"}, history)
 	if err != nil {
 		t.Fatalf("Test case 1 failed: %v", err)
 	}
@@ -332,7 +334,7 @@ func Test_howto_integration(t *testing.T) {
 
 	// Test case 2: Run the last command and check the output.
 	out.Reset()
-	err = howto(out, ask, []string{"-run"}, history)
+	err = Howto(out, ask, ver, []string{"-run"}, history)
 	if err != nil {
 		t.Fatalf("Test case 2 failed: %v", err)
 	}
@@ -343,7 +345,7 @@ func Test_howto_integration(t *testing.T) {
 
 	// Test case 3: Ask a follow-up question and check the output.
 	out.Reset()
-	err = howto(out, ask, []string{"+echo", "world"}, history)
+	err = Howto(out, ask, ver, []string{"+echo", "world"}, history)
 	if err != nil {
 		t.Fatalf("Test case 3 failed: %v", err)
 	}

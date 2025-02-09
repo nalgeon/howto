@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nalgeon/howto/ai"
+	"github.com/nalgeon/howto/internal/ai"
 )
 
-func Test_printUsage(t *testing.T) {
+func TestPrintUsage(t *testing.T) {
 	out := &bytes.Buffer{}
-	printUsage(out)
+	PrintUsage(out)
 	got := out.String()
 
 	if !strings.Contains(got, "Usage: howto [-h] [-v] [-run] [question]") {
@@ -33,10 +33,11 @@ func Test_printVersion(t *testing.T) {
 	history := &History{messages: []string{"q1", "a1"}}
 
 	out := &bytes.Buffer{}
-	printVersion(out, "1.2.3", config, history)
+	ver := NewVersion("1.2.3", "commit", "now")
+	printVersion(out, ver, config, history)
 	got := out.String()
 
-	if !strings.Contains(got, bold("howto")+" 1.2.3") {
+	if !strings.Contains(got, bold("howto")+" 1.2.3 (now)") {
 		t.Errorf("Expected version string, got %q", got)
 	}
 	if !strings.Contains(got, "## Config") {

@@ -1,15 +1,15 @@
-package main
+package internal
 
 import (
 	"fmt"
 	"io"
 	"strings"
 
-	"github.com/nalgeon/howto/ai"
+	"github.com/nalgeon/howto/internal/ai"
 )
 
-// printUsage prints usage information.
-func printUsage(out io.Writer) {
+// PrintUsage prints usage information.
+func PrintUsage(out io.Writer) {
 	fmt.Fprintln(out, "Usage: howto [-h] [-v] [-run] [question]")
 	fmt.Fprintln(out)
 	fmt.Fprintln(out, "A humble command-line assistant.")
@@ -24,8 +24,8 @@ func printUsage(out io.Writer) {
 }
 
 // printVersion prints version, configuration, and history information.
-func printVersion(out io.Writer, version string, config ai.Config, history *History) {
-	fmt.Fprintln(out, bold("howto"), version)
+func printVersion(out io.Writer, ver Version, config ai.Config, history *History) {
+	fmt.Fprintln(out, bold("howto"), ver.String())
 	fmt.Fprintln(out)
 	fmt.Fprintln(out, bold("## Config"))
 	fmt.Fprintln(out, "- Vendor:", config.Vendor)
