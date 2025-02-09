@@ -1,0 +1,21 @@
+builds:
+    - env:
+          - CGO_ENABLED=0
+      goos:
+          - linux
+          - windows
+          - darwin
+      goarch:
+          - amd64
+          - arm64
+brews:
+    - name: howto
+      homepage: "https://github.com/nalgeon/howto"
+      description: "A humble command-line assistant"
+      license: "MIT"
+      repository:
+          owner: nalgeon
+          name: howto
+      commit_author:
+          name: nalgeon
+          email: m@antonz.org
