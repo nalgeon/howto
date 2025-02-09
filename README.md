@@ -30,6 +30,15 @@ There are some additional features you may find useful. See the Usage section fo
 
 ## Installation
 
+### Brew
+
+This method is preferred if you use Homebrew:
+
+```text
+brew tap nalgeon/howto https://github.com/nalgeon/howto
+brew install howto
+```
+
 ### Go install
 
 This method is preferred if you have Go installed:
@@ -40,7 +49,7 @@ go install github.com/nalgeon/howto@latest
 
 ### Manual
 
-`howto` is a binary executable file (`howto.exe` on Windows, `howto` on Linux/macOS). Download it from the link below, unpack and put somewhere in your `PATH` ([what's that?](https://gist.github.com/nex3/c395b2f8fd4b02068be37c961301caa7)), so you can run it from anyhwere on your computer.
+Howto is a binary executable file (`howto.exe` on Windows, `howto` on Linux/macOS). Download it from the link below, unpack and put somewhere in your `PATH` ([what's that?](https://gist.github.com/nex3/c395b2f8fd4b02068be37c961301caa7)), so you can run it from anyhwere on your computer.
 
 [**Download**](https://github.com/nalgeon/howto/releases/latest)
 
@@ -117,7 +126,9 @@ Describe your task to `howto`, and it will provide an answer:
 $ howto curl example.org but print only the headers
 curl -I example.org
 
-The `-I` option in `curl` is used to fetch the HTTP headers only, without the response body.
+The `curl` command is used to transfer data from or to a server.
+The `-I` option tells `curl` to fetch the HTTP headers only, without the body
+content.
 ```
 
 ### Follow-ups
