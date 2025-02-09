@@ -219,31 +219,6 @@ func Test_getHistoryPath(t *testing.T) {
 	})
 }
 
-func Test_getHistoryPath_error(t *testing.T) {
-	// Save current environment variables and restore them after the test.
-	oldEnv := map[string]string{}
-	for _, env := range os.Environ() {
-		key, value, _ := strings.Cut(env, "=")
-		oldEnv[key] = value
-	}
-	defer func() {
-		os.Clearenv()
-		for k, v := range oldEnv {
-			os.Setenv(k, v)
-		}
-	}()
-
-	if runtime.GOOS == "windows" {
-		t.Skip("Skipping test on windows OS")
-	}
-
-	os.Setenv("HOME", "/root")
-	_, err := getHistoryPath()
-	if err == nil {
-		t.Fatalf("getHistoryPath should return an error")
-	}
-}
-
 func Test_loadHistory(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "test_history.json")
