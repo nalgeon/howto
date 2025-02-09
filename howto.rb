@@ -5,21 +5,21 @@
 class Howto < Formula
   desc "A humble command-line assistant"
   homepage "https://github.com/nalgeon/howto"
-  version "0.1.1"
+  version "0.2.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/nalgeon/howto/releases/download/v0.1.1/howto_0.1.1_darwin_amd64.tar.gz"
-      sha256 "a8501d6c58ff10347e7e1ffb15d1cef6cef70bff6ec053e1f1bf10a27e527a3f"
+      url "https://github.com/nalgeon/howto/releases/download/0.2.0/howto_0.2.0_darwin_amd64.tar.gz"
+      sha256 "db49d7b789733392327d46969bfcf790d550fd49dbc010a71c7e669397f6f105"
 
       def install
         bin.install "howto"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/nalgeon/howto/releases/download/v0.1.1/howto_0.1.1_darwin_arm64.tar.gz"
-      sha256 "bc5cab07bd1c6f60c343ba2f99083b19a0f9b9820f8e445c623056c2eef0a9cb"
+      url "https://github.com/nalgeon/howto/releases/download/0.2.0/howto_0.2.0_darwin_arm64.tar.gz"
+      sha256 "777e97749a8c684645dd8192c0d23adbaac1dc3bcfd2820b25ad4d7e6f8c530e"
 
       def install
         bin.install "howto"
@@ -30,8 +30,8 @@ class Howto < Formula
   on_linux do
     if Hardware::CPU.intel?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/nalgeon/howto/releases/download/v0.1.1/howto_0.1.1_linux_amd64.tar.gz"
-        sha256 "234b476756261dfa9bc87e222fba76d65f5ed61e42cf299fcb366a6ce317ad08"
+        url "https://github.com/nalgeon/howto/releases/download/0.2.0/howto_0.2.0_linux_amd64.tar.gz"
+        sha256 "3f49f3090c45b463a2d80476d945806440ffe487af6fa04704ec9de31a40b2a3"
 
         def install
           bin.install "howto"
@@ -40,8 +40,8 @@ class Howto < Formula
     end
     if Hardware::CPU.arm?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/nalgeon/howto/releases/download/v0.1.1/howto_0.1.1_linux_arm64.tar.gz"
-        sha256 "19a05cd4c33cc60169218f7da77c4d2cc58d546343cff09722d6acc6e39d9f46"
+        url "https://github.com/nalgeon/howto/releases/download/0.2.0/howto_0.2.0_linux_arm64.tar.gz"
+        sha256 "ae951dc1bead12588ae5667173bdec529fea48274c89b91394b13663a6b896c5"
 
         def install
           bin.install "howto"
