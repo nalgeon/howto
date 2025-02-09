@@ -11,7 +11,7 @@ The `-I` option tells `curl` to fetch the HTTP headers only, without the body
 content.
 ```
 
-Howto works with any OpenAI-compatible provider and local Ollama models (coming soon). It's a simple tool that doesn't interfere with your terminal. Not an "intelligent terminal" or anything. You ask, and howto answers. That's the deal.
+Howto works with any OpenAI-compatible provider and local Ollama models. It's a simple tool that doesn't interfere with your terminal. Not an "intelligent terminal" or anything. You ask, and howto answers. That's the deal.
 
 ```text
 Usage: howto [-h] [-v] [-run] [question]
@@ -61,7 +61,7 @@ xattr -d com.apple.quarantine /path/to/folder/howto
 
 ## Configuration
 
-Howto is configured using environment variables. It can use cloud AIs or local Ollama models (coming soon).
+Howto is configured using environment variables. It can use cloud AIs or local Ollama models.
 
 Cloud AI providers charge for using their API, except for Gemini, which offers a free plan but may use your data in their products. Ollama is free without conditions but uses your machine's CPU or GPU resources.
 
@@ -86,7 +86,7 @@ Anything like [OpenRouter](https://openrouter.ai/docs/), [Nebius](https://docs.n
 2. Get an API key from the provider and save it to the `HOWTO_AI_TOKEN` environment variable.
 3. Set the `HOWTO_AI_MODEL` environment variable to the model name you want to use.
 
-### Ollama (coming soon)
+### Ollama
 
 Ollama runs AI models locally on your machine. Here's how to set it up:
 
