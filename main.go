@@ -9,7 +9,11 @@ import (
 	"github.com/nalgeon/howto/ai"
 )
 
-var version string = "latest"
+var (
+	version = "dev"
+	commit  = "head"
+	date    = "now"
+)
 
 func main() {
 	history, err := LoadHistory()

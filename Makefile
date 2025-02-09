@@ -1,8 +1,6 @@
-BUILD_TAG := $(shell git describe --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)
-
 .PHONY: build
 build:
-	@go build -ldflags "-X main.version=$(BUILD_TAG)" -o howto
+	@go build -o howto
 
 .PHONY: test
 test:

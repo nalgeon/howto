@@ -21,7 +21,8 @@ func howto(out io.Writer, ask ai.AskFunc, args []string, history *History) error
 	case "-h", "--help":
 		printUsage(out)
 	case "-v", "--version":
-		printVersion(out, version, ai.Conf, history)
+		ver := versionString()
+		printVersion(out, ver, ai.Conf, history)
 	case "-run":
 		err = runCommand(out, history)
 	default:
@@ -108,4 +109,14 @@ func execCommand(command string) (string, error) {
 	}
 
 	return strings.TrimSpace(outb.String()), nil
+}
+
+func versionString() string {
+	var ver string
+	if version == "dev" {
+		ver = commit
+	} else {
+		ver = version
+	}
+	return ver + " (" + date + ")"
 }

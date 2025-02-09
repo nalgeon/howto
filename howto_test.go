@@ -37,7 +37,7 @@ func Test_howto(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
-		if !strings.Contains(out.String(), bold("howto")+" "+version) {
+		if !strings.Contains(out.String(), bold("howto")+" head (now)") {
 			t.Errorf("Expected version string, got %q", out.String())
 		}
 	})
