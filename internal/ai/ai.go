@@ -43,6 +43,8 @@ func init() {
 	switch config.Vendor {
 	case "openai":
 		Ask = openai{config}.Ask
+	case "ollama":
+		Ask = ollama{config}.Ask
 	default:
 		fmt.Println("Unknown AI vendor:", config.Vendor)
 		os.Exit(1)

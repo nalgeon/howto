@@ -108,7 +108,7 @@ ollama pull gemma2:2b
 5. Set the `HOWTO_AI_VENDOR` environment variable to `ollama`.
 6. Set the `HOWTO_AI_MODEL` environment variable to `gemma2:2b` (or another model of your choice).
 
-Gemma 2 is a lightweight model that uses about 1GB of memory and works quickly without a GPU.
+Gemma 2 is a lightweight model that uses about 1GB of memory and runs well without a GPU. Unfortunately, it's not very smart. You can try more powerful (and resource hungry) models like `mistral` or `mistral-nemo`.
 
 ### Other settings
 
