@@ -18,22 +18,25 @@ func TestOllama_Ask(t *testing.T) {
 		Temperature: 0.7,
 		Timeout:     30 * time.Second,
 	}
-	ai := ollama{config}
+	history := []string{"Hello", "Hi there!"}
 
 	t.Run("successful response", func(t *testing.T) {
 		httpClient = NewTestClient(func(req *http.Request) *http.Response {
 			return &http.Response{
 				StatusCode: http.StatusOK,
-				Body:       io.NopCloser(bytes.NewBufferString(`{"choices": [{"message": {"content": "test"}}]}`)),
+				Body:       io.NopCloser(bytes.NewBufferString(`{"message": {"content": "I'm doing great!"}}`)),
 				Header:     make(http.Header),
 			}
 		})
 
-		history := []string{}
+		ai := ollama{config}
 
-		_, err := ai.Ask(history)
+		answer, err := ai.Ask(history)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
+		}
+		if answer != "I'm doing great!" {
+			t.Errorf("Expected answer: I'm doing great!, got: %s", answer)
 		}
 	})
 }
