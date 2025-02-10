@@ -88,25 +88,10 @@ Anything like [OpenRouter](https://openrouter.ai/docs/), [Nebius](https://docs.n
 
 ### Ollama
 
-Ollama runs AI models locally on your machine. Here's how to set it up:
+[Ollama](https://ollama.com/) runs AI models locally on your machine. After you've installed it and pulled a model (e.g. `gemma2:2b`), follow these steps:
 
-1. Download and install [Ollama](https://ollama.com/) for your operating system.
-2. Set the [environment variables](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server) to use less memory:
-
-```text
-OLLAMA_KEEP_ALIVE = 1h
-OLLAMA_FLASH_ATTENTION = 1
-```
-
-3. Restart Ollama.
-4. Download the AI model Gemma 2 (or another model of your choice):
-
-```text
-ollama pull gemma2:2b
-```
-
-5. Set the `HOWTO_AI_VENDOR` environment variable to `ollama`.
-6. Set the `HOWTO_AI_MODEL` environment variable to `gemma2:2b` (or another model of your choice).
+1. Set the `HOWTO_AI_VENDOR` environment variable to `ollama`.
+2. Set the `HOWTO_AI_MODEL` environment variable to the model name (e.g. `gemma2:2b`).
 
 Gemma 2 is a lightweight model that uses about 1GB of memory and runs well without a GPU. Unfortunately, it's not very smart. You can try more powerful (and resource hungry) models like `mistral` or `mistral-nemo`.
 
