@@ -26,7 +26,9 @@ Options:
                   Use '+' to ask a follow up question
 ```
 
-There are some additional features you may find useful. See the Usage section for details.
+There are some additional features you may find useful. See the [Usage](#usage) section for details.
+
+[Installation](#installation) • [Configuration](#configuration) • [Usage](#usage)
 
 ## Installation
 
