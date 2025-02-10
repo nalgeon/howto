@@ -35,10 +35,6 @@ type ollama struct {
 
 // Ask sends a question to the AI and returns the answer.
 func (ai ollama) Ask(history []string) (string, error) {
-	if ai.config.Token == "" {
-		return "", errMissingToken
-	}
-
 	messages := buildMessages(ai.config.Prompt, history)
 	req, err := ai.buildReq(messages)
 	if err != nil {
