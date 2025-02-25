@@ -93,8 +93,8 @@ Anything like [OpenRouter](https://openrouter.ai/docs/), [Nebius](https://docs.n
 [Ollama](https://ollama.com/) runs AI models locally on your machine. After you've installed it and pulled a model (e.g. `gemma2:2b`), follow these steps:
 
 1. Set the `HOWTO_AI_VENDOR` environment variable to `ollama`.
-2. Optional: set `HOWTO_AI_URL` to a remote Ollama server, e.g. `http://192.168.1.12:11434/api/chat`
-3. Set the `HOWTO_AI_MODEL` environment variable to the model name (e.g. `gemma2:2b`).
+2. Set the `HOWTO_AI_MODEL` environment variable to the model name (e.g. `gemma2:2b`).
+3. Optionally, if you are using a remote Ollama server, set the `HOWTO_AI_URL` environment variable (e.g. `http://192.168.1.12:11434/api/chat`).
 
 Gemma 2 is a lightweight model that uses about 1GB of memory and runs well without a GPU. Unfortunately, it's not very smart. You can try more powerful (and resource hungry) models like `mistral` or `mistral-nemo`.
 
