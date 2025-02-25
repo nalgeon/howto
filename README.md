@@ -77,13 +77,14 @@ Here's how to set up an AI provider:
 
 ### OpenAI-compatible provider
 
-Anything like [OpenRouter](https://openrouter.ai/docs/), [Nebius](https://docs.nebius.com/studio/inference/api) or [Gemini](https://ai.google.dev/gemini-api/docs/openai):
+Anything like [Gemini](https://ai.google.dev/gemini-api/docs/openai), [Grok](https://docs.x.ai/docs/overview), [Nebius](https://docs.nebius.com/studio/inference/api) or [OpenRouter](https://openrouter.ai/docs/):
 
 1. Obtain an API endpoint from the documentation and save it to the `HOWTO_AI_URL` environment variable. Here are the endpoints for common providers:
 
--   OpenRouter: `https://openrouter.ai/api/v1/chat/completions`
--   Nebius: `https://api.studio.nebius.ai/v1/chat/completions`
 -   Gemini: `https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`
+-   Grok: `https://api.x.ai/v1/chat/completions`
+-   Nebius: `https://api.studio.nebius.ai/v1/chat/completions`
+-   OpenRouter: `https://openrouter.ai/api/v1/chat/completions`
 
 2. Get an API key from the provider and save it to the `HOWTO_AI_TOKEN` environment variable.
 3. Set the `HOWTO_AI_MODEL` environment variable to the model name you want to use.
