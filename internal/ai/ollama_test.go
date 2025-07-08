@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/nalgeon/be"
 )
 
 func TestOllama_Ask(t *testing.T) {
@@ -20,7 +22,7 @@ func TestOllama_Ask(t *testing.T) {
 	}
 	history := []string{"Hello", "Hi there!"}
 
-	t.Run("successful response", func(t *testing.T) {
+	t.Run("successful", func(t *testing.T) {
 		httpClient = NewTestClient(func(req *http.Request) *http.Response {
 			return &http.Response{
 				StatusCode: http.StatusOK,
@@ -32,11 +34,7 @@ func TestOllama_Ask(t *testing.T) {
 		ai := ollama{config}
 
 		answer, err := ai.Ask(history)
-		if err != nil {
-			t.Fatalf("Unexpected error: %v", err)
-		}
-		if answer != "I'm doing great!" {
-			t.Errorf("Expected answer: I'm doing great!, got: %s", answer)
-		}
+		be.Err(t, err, nil)
+		be.Equal(t, answer, "I'm doing great!")
 	})
 }

@@ -1,8 +1,9 @@
 package ai
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/nalgeon/be"
 )
 
 func Test_buildMessages(t *testing.T) {
@@ -63,9 +64,7 @@ func Test_buildMessages(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := buildMessages(prompt, tt.history)
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Expected: %v, got: %v", tt.want, got)
-			}
+			be.Equal(t, got, tt.want)
 		})
 	}
 }

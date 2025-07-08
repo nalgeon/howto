@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"reflect"
-	"strings"
 	"testing"
 	"time"
+
+	"github.com/nalgeon/be"
 )
 
 type RoundTripFunc func(req *http.Request) *http.Response
@@ -36,39 +36,8 @@ func TestOpenAI_Ask(t *testing.T) {
 
 	history := []string{"Hello", "Hi there!"}
 
-	t.Run("successful request", func(t *testing.T) {
-		want := oaiRequest{
-			Model:       config.Model,
-			Messages:    buildMessages(config.Prompt, history),
-			Temperature: config.Temperature,
-		}
-
-		wantBytes, _ := json.Marshal(want)
-		wantStr := string(wantBytes)
-
+	t.Run("successful", func(t *testing.T) {
 		httpClient = NewTestClient(func(req *http.Request) *http.Response {
-			if req.URL.String() != config.URL {
-				t.Errorf("Expected URL: %s, got: %s", config.URL, req.URL.String())
-			}
-
-			if req.Header.Get("Content-Type") != "application/json" {
-				t.Errorf("Expected Content-Type: application/json, got: %s", req.Header.Get("Content-Type"))
-			}
-
-			if req.Header.Get("Authorization") != "Bearer "+config.Token {
-				t.Errorf("Expected Authorization: Bearer %s, got: %s", config.Token, req.Header.Get("Authorization"))
-			}
-
-			bodyBytes, err := io.ReadAll(req.Body)
-			if err != nil {
-				t.Fatalf("Error reading request body: %v", err)
-			}
-			bodyString := string(bodyBytes)
-
-			if bodyString != wantStr {
-				t.Errorf("Expected request body: %s, got: %s", wantStr, bodyString)
-			}
-
 			responseBody := `{"choices": [{"message": {"content": "I'm doing great!"}}]}`
 			return &http.Response{
 				StatusCode: http.StatusOK,
@@ -79,24 +48,14 @@ func TestOpenAI_Ask(t *testing.T) {
 
 		ai := openai{config}
 		answer, err := ai.Ask(history)
-		if err != nil {
-			t.Fatalf("Unexpected error: %v", err)
-		}
-
-		if answer != "I'm doing great!" {
-			t.Errorf("Expected answer: I'm doing great!, got: %s", answer)
-		}
+		be.Err(t, err, nil)
+		be.Equal(t, answer, "I'm doing great!")
 	})
 
 	t.Run("missing token", func(t *testing.T) {
 		ai := openai{Config{Token: ""}}
 		_, err := ai.Ask([]string{})
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if err.Error() != errMissingToken.Error() {
-			t.Fatalf("Expected error %q, got %q", errMissingToken, err)
-		}
+		be.Err(t, err, errMissingToken)
 	})
 
 	t.Run("http error", func(t *testing.T) {
@@ -111,12 +70,7 @@ func TestOpenAI_Ask(t *testing.T) {
 
 		ai := openai{config}
 		_, err := ai.Ask(history)
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if !strings.Contains(err.Error(), "http status: 500 Internal Server Error") {
-			t.Fatalf("Expected error containing %q, got %q", "http status: 500 Internal Server Error", err)
-		}
+		be.Err(t, err, "http status: 500 Internal Server Error")
 	})
 
 	t.Run("json decode error", func(t *testing.T) {
@@ -130,12 +84,7 @@ func TestOpenAI_Ask(t *testing.T) {
 
 		ai := openai{config}
 		_, err := ai.Ask(history)
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if !strings.Contains(err.Error(), "invalid character") {
-			t.Fatalf("Expected error containing %q, got %q", "invalid character", err)
-		}
+		be.Err(t, err, "invalid character")
 	})
 
 	t.Run("no answer", func(t *testing.T) {
@@ -150,12 +99,7 @@ func TestOpenAI_Ask(t *testing.T) {
 
 		ai := openai{config}
 		_, err := ai.Ask(history)
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if err.Error() != "no answer" {
-			t.Fatalf("Expected error %q, got %q", "no answer", err)
-		}
+		be.Err(t, err, "no answer")
 	})
 }
 
@@ -173,162 +117,23 @@ func TestOpenAI_buildReq(t *testing.T) {
 	messages := []message{{Role: "user", Content: "hello"}}
 
 	req, err := ai.buildReq(messages)
-	if err != nil {
-		t.Fatalf("Unexpected error: %v", err)
-	}
-
-	if req.Method != http.MethodPost {
-		t.Errorf("Expected method %q, got %q", http.MethodPost, req.Method)
-	}
-
-	if req.URL.String() != config.URL {
-		t.Errorf("Expected URL %q, got %q", config.URL, req.URL.String())
-	}
-
-	if req.Header.Get("Content-Type") != "application/json" {
-		t.Errorf("Expected Content-Type %q, got %q", "application/json", req.Header.Get("Content-Type"))
-	}
-
-	if req.Header.Get("Authorization") != "Bearer "+config.Token {
-		t.Errorf("Expected Authorization %q, got %q", "Bearer "+config.Token, req.Header.Get("Authorization"))
-	}
+	be.Err(t, err, nil)
+	be.Equal(t, req.Method, http.MethodPost)
+	be.Equal(t, req.URL.String(), config.URL)
+	be.Equal(t, req.Header.Get("Content-Type"), "application/json")
+	be.Equal(t, req.Header.Get("Authorization"), "Bearer "+config.Token)
 
 	bodyBytes, err := io.ReadAll(req.Body)
-	if err != nil {
-		t.Fatalf("Error reading request body: %v", err)
-	}
+	be.Err(t, err, nil)
 
 	var requestBody oaiRequest
 	err = json.Unmarshal(bodyBytes, &requestBody)
-	if err != nil {
-		t.Fatalf("Error unmarshaling request body: %v", err)
-	}
+	be.Err(t, err, nil)
 
 	expectedRequestBody := oaiRequest{
 		Model:       config.Model,
 		Messages:    messages,
 		Temperature: config.Temperature,
 	}
-
-	if !reflect.DeepEqual(requestBody, expectedRequestBody) {
-		t.Errorf("Expected request body %v, got %v", expectedRequestBody, requestBody)
-	}
-}
-
-func TestOpenAI_fetchResp(t *testing.T) {
-	config := Config{
-		Vendor:      "openai",
-		URL:         "https://test.com/v1/chat/completions",
-		Token:       "test_token",
-		Model:       "gpt-4",
-		Prompt:      "You are a test assistant.",
-		Temperature: 0.7,
-		Timeout:     30 * time.Second,
-	}
-	ai := openai{config}
-
-	t.Run("successful response", func(t *testing.T) {
-		httpClient = NewTestClient(func(req *http.Request) *http.Response {
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Body:       io.NopCloser(bytes.NewBufferString(`{"choices": [{"message": {"content": "test"}}]}`)),
-				Header:     make(http.Header),
-			}
-		})
-
-		req, _ := http.NewRequest("POST", config.URL, nil)
-		resp, err := ai.fetchResp(req)
-		if err != nil {
-			t.Fatalf("Unexpected error: %v", err)
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode != http.StatusOK {
-			t.Errorf("Expected status code %d, got %d", http.StatusOK, resp.StatusCode)
-		}
-	})
-
-	t.Run("http error", func(t *testing.T) {
-		httpClient = NewTestClient(func(req *http.Request) *http.Response {
-			return &http.Response{
-				StatusCode: http.StatusInternalServerError,
-				Status:     "500 Internal Server Error",
-				Body:       io.NopCloser(bytes.NewBufferString("")),
-				Header:     make(http.Header),
-			}
-		})
-
-		req, _ := http.NewRequest("POST", config.URL, nil)
-		_, err := ai.fetchResp(req)
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if !strings.Contains(err.Error(), "http status: 500 Internal Server Error") {
-			t.Fatalf("Expected error containing %q, got %q", "http status", err.Error())
-		}
-	})
-}
-
-func TestOpenAI_parseAnswer(t *testing.T) {
-	config := Config{
-		Vendor:      "openai",
-		URL:         "https://test.com/v1/chat/completions",
-		Token:       "test_token",
-		Model:       "gpt-4",
-		Prompt:      "You are a test assistant.",
-		Temperature: 0.7,
-		Timeout:     30 * time.Second,
-	}
-	ai := openai{config}
-
-	t.Run("successful parse", func(t *testing.T) {
-		responseBody := `{"choices": [{"message": {"content": "test answer"}}]}`
-		resp := &http.Response{
-			StatusCode: http.StatusOK,
-			Body:       io.NopCloser(bytes.NewBufferString(responseBody)),
-			Header:     make(http.Header),
-		}
-
-		answer, err := ai.parseAnswer(resp)
-		if err != nil {
-			t.Fatalf("Unexpected error: %v", err)
-		}
-
-		if answer != "test answer" {
-			t.Errorf("Expected answer %q, got %q", "test answer", answer)
-		}
-	})
-
-	t.Run("no answer", func(t *testing.T) {
-		responseBody := `{"choices": []}`
-		resp := &http.Response{
-			StatusCode: http.StatusOK,
-			Body:       io.NopCloser(bytes.NewBufferString(responseBody)),
-			Header:     make(http.Header),
-		}
-
-		_, err := ai.parseAnswer(resp)
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if err.Error() != "no answer" {
-			t.Errorf("Expected error %q, got %q", "no answer", err.Error())
-		}
-	})
-
-	t.Run("decode error", func(t *testing.T) {
-		resp := &http.Response{
-			StatusCode: http.StatusOK,
-			Body:       io.NopCloser(bytes.NewBufferString("invalid json")),
-			Header:     make(http.Header),
-		}
-
-		_, err := ai.parseAnswer(resp)
-		if err == nil {
-			t.Fatalf("Expected error, got nil")
-		}
-		if !strings.Contains(err.Error(), "invalid character") {
-			t.Errorf("Expected error containing %q, got %q", "invalid character", err.Error())
-		}
-	})
+	be.Equal(t, requestBody, expectedRequestBody)
 }

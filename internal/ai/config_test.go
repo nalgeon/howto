@@ -2,10 +2,11 @@ package ai
 
 import (
 	"os"
-	"reflect"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/nalgeon/be"
 )
 
 func Test_loadConfig(t *testing.T) {
@@ -116,17 +117,13 @@ func Test_loadConfig(t *testing.T) {
 				tt.want.Prompt = got.Prompt
 			}
 
-			if tt.wantErr == "" && err != nil {
-				t.Fatalf("%s: unexpected error: %v", tt.name, err)
+			if tt.wantErr == "" {
+				be.Err(t, err, nil)
+			} else {
+				be.Err(t, err, tt.wantErr)
 			}
 
-			if tt.wantErr != "" && err.Error() != tt.wantErr {
-				t.Fatalf("%s: expected error: %v, got: %v", tt.name, tt.wantErr, err.Error())
-			}
-
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Fatalf("%s: expected: %#v, got: %#v", tt.name, tt.want, got)
-			}
+			be.Equal(t, got, tt.want)
 		})
 	}
 }

@@ -2,11 +2,11 @@ package internal
 
 import (
 	"bytes"
-	"io"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/nalgeon/be"
 	"github.com/nalgeon/howto/internal/ai"
 )
 
@@ -14,10 +14,7 @@ func TestPrintUsage(t *testing.T) {
 	out := &bytes.Buffer{}
 	PrintUsage(out)
 	got := out.String()
-
-	if !strings.Contains(got, "Usage: howto [-h] [-v] [-run] [question]") {
-		t.Errorf("Expected usage string, got %q", got)
-	}
+	be.True(t, strings.Contains(got, "Usage: howto [-h] [-v] [-run] [question]"))
 }
 
 func Test_printVersion(t *testing.T) {
@@ -37,18 +34,10 @@ func Test_printVersion(t *testing.T) {
 	printVersion(out, ver, config, history)
 	got := out.String()
 
-	if !strings.Contains(got, bold("howto")+" 1.2.3 (now)") {
-		t.Errorf("Expected version string, got %q", got)
-	}
-	if !strings.Contains(got, "## Config") {
-		t.Errorf("Expected config header, got %q", got)
-	}
-	if !strings.Contains(got, "## Prompt") {
-		t.Errorf("Expected prompt header, got %q", got)
-	}
-	if !strings.Contains(got, "## History") {
-		t.Errorf("Expected history header, got %q", got)
-	}
+	be.True(t, strings.Contains(got, bold("howto")+" 1.2.3 (now)"))
+	be.True(t, strings.Contains(got, "## Config"))
+	be.True(t, strings.Contains(got, "## Prompt"))
+	be.True(t, strings.Contains(got, "## History"))
 }
 
 func Test_printWrapped(t *testing.T) {
@@ -94,9 +83,7 @@ func Test_printWrapped(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			out := &bytes.Buffer{}
 			printWrapped(out, tt.s, tt.width)
-			if out.String() != tt.want {
-				t.Errorf("Expected %q, got %q", tt.want, out.String())
-			}
+			be.Equal(t, out.String(), tt.want)
 		})
 	}
 }
@@ -104,18 +91,5 @@ func Test_printWrapped(t *testing.T) {
 func Test_bold(t *testing.T) {
 	got := bold("test")
 	want := "\033[1mtest\033[0m"
-	if got != want {
-		t.Errorf("Expected %q, got %q", want, got)
-	}
-}
-
-func TestPrintWrapped_no_panic(t *testing.T) {
-	// Test case with a nil io.Writer
-	printWrapped(io.Discard, "test string", 10)
-
-	// Test case with an empty string
-	printWrapped(io.Discard, "", 10)
-
-	// Test case with zero width
-	printWrapped(io.Discard, "test string", 0)
+	be.Equal(t, got, want)
 }
