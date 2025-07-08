@@ -16,6 +16,3 @@ brews:
       repository:
           owner: nalgeon
           name: howto
-      commit_author:
-          name: nalgeon
-          email: m@antonz.org
