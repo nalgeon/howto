@@ -83,7 +83,7 @@ func printAnswer(out io.Writer, answer string) {
 		printWrapped(out, answer, 80)
 		return
 	}
-	fmt.Fprintln(out, bold(command))
+	_, _ = fmt.Fprintln(out, bold(command))
 	printWrapped(out, rest, 80)
 }
 
@@ -94,13 +94,13 @@ func runCommand(out io.Writer, history *History) error {
 		return fmt.Errorf("no command to run")
 	}
 
-	fmt.Fprintln(out, bold(cmd))
-	fmt.Fprintln(out)
+	_, _ = fmt.Fprintln(out, bold(cmd))
+	_, _ = fmt.Fprintln(out)
 	output, err := execCommand(cmd)
 	if err != nil {
 		return err
 	}
-	fmt.Fprintln(out, output)
+	_, _ = fmt.Fprintln(out, output)
 	return nil
 }
 

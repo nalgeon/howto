@@ -48,7 +48,8 @@ func loadConfig() (Config, error) {
 		case "ollama":
 			url = ollamaURL
 		default:
-			return Config{}, fmt.Errorf("Unknown AI vendor: %s", vendor)
+			err := fmt.Errorf("unknown AI vendor: %s", vendor)
+			return Config{}, err
 		}
 	}
 

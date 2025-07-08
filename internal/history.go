@@ -74,7 +74,7 @@ func (h *History) LastCommand() string {
 // Print prints the conversation history to stdout.
 func (h *History) Print(out io.Writer) {
 	if len(h.messages) == 0 {
-		fmt.Fprintln(out, "(empty)")
+		_, _ = fmt.Fprintln(out, "(empty)")
 		return
 	}
 	for i, message := range h.messages {
@@ -88,7 +88,7 @@ func (h *History) Print(out io.Writer) {
 		if len(message) > 80 {
 			message = message[:77] + "..."
 		}
-		fmt.Fprintln(out, message)
+		_, _ = fmt.Fprintln(out, message)
 	}
 }
 

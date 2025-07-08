@@ -19,7 +19,7 @@ func Test_loadConfig(t *testing.T) {
 	defer func() {
 		os.Clearenv()
 		for k, v := range oldEnv {
-			os.Setenv(k, v)
+			_ = os.Setenv(k, v)
 		}
 	}()
 
@@ -47,13 +47,13 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "custom config",
 			setupEnv: func() {
-				os.Setenv("HOWTO_AI_VENDOR", "ollama")
-				os.Setenv("HOWTO_AI_URL", "http://localhost:12345")
-				os.Setenv("HOWTO_AI_TOKEN", "test_token")
-				os.Setenv("HOWTO_AI_MODEL", "test_model")
-				os.Setenv("HOWTO_AI_PROMPT", "test_prompt")
-				os.Setenv("HOWTO_AI_TEMPERATURE", "0.5")
-				os.Setenv("HOWTO_AI_TIMEOUT", "60")
+				_ = os.Setenv("HOWTO_AI_VENDOR", "ollama")
+				_ = os.Setenv("HOWTO_AI_URL", "http://localhost:12345")
+				_ = os.Setenv("HOWTO_AI_TOKEN", "test_token")
+				_ = os.Setenv("HOWTO_AI_MODEL", "test_model")
+				_ = os.Setenv("HOWTO_AI_PROMPT", "test_prompt")
+				_ = os.Setenv("HOWTO_AI_TEMPERATURE", "0.5")
+				_ = os.Setenv("HOWTO_AI_TIMEOUT", "60")
 			},
 			want: Config{
 				Vendor:      "ollama",
@@ -68,7 +68,7 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "invalid temperature",
 			setupEnv: func() {
-				os.Setenv("HOWTO_AI_TEMPERATURE", "invalid")
+				_ = os.Setenv("HOWTO_AI_TEMPERATURE", "invalid")
 			},
 			want: Config{
 				Vendor:      defaultVendor,
@@ -83,7 +83,7 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "invalid timeout",
 			setupEnv: func() {
-				os.Setenv("HOWTO_AI_TIMEOUT", "invalid")
+				_ = os.Setenv("HOWTO_AI_TIMEOUT", "invalid")
 			},
 			want: Config{
 				Vendor:      defaultVendor,
@@ -98,10 +98,10 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "unknown vendor",
 			setupEnv: func() {
-				os.Setenv("HOWTO_AI_VENDOR", "unknown")
+				_ = os.Setenv("HOWTO_AI_VENDOR", "unknown")
 			},
 			want:    Config{},
-			wantErr: "Unknown AI vendor: unknown",
+			wantErr: "unknown AI vendor: unknown",
 		},
 	}
 

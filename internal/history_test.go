@@ -146,7 +146,7 @@ func Test_getHistoryPath(t *testing.T) {
 	defer func() {
 		os.Clearenv()
 		for k, v := range oldEnv {
-			os.Setenv(k, v)
+			_ = os.Setenv(k, v)
 		}
 	}()
 
@@ -251,13 +251,13 @@ func TestLoadHistory(t *testing.T) {
 	defer func() {
 		os.Clearenv()
 		for k, v := range oldEnv {
-			os.Setenv(k, v)
+			_ = os.Setenv(k, v)
 		}
 	}()
 
 	t.Run("success", func(t *testing.T) {
 		dir := t.TempDir()
-		os.Setenv("HOME", dir)
+		_ = os.Setenv("HOME", dir)
 
 		// Create a dummy history file.
 		historyPath, err := getHistoryPath()

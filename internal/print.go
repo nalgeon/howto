@@ -10,39 +10,39 @@ import (
 
 // PrintUsage prints usage information.
 func PrintUsage(out io.Writer) {
-	fmt.Fprintln(out, "Usage: howto [-h] [-v] [-run] [question]")
-	fmt.Fprintln(out)
-	fmt.Fprintln(out, "A humble command-line assistant.")
-	fmt.Fprintln(out, "See", underlined("https://github.com/nalgeon/howto"), "for details.")
-	fmt.Fprintln(out)
-	fmt.Fprintln(out, "Options:")
-	fmt.Fprintln(out, "  -h, --help      Show this help message and exit")
-	fmt.Fprintln(out, "  -v, --version   Show version information and exit")
-	fmt.Fprintln(out, "  -run            Run the last suggested command")
-	fmt.Fprintln(out, "  question        Describe the task to get a command suggestion")
-	fmt.Fprintln(out, "                  Use '+' to ask a follow up question")
+	fprintln(out, "Usage: howto [-h] [-v] [-run] [question]")
+	fprintln(out)
+	fprintln(out, "A humble command-line assistant.")
+	fprintln(out, "See", underlined("https://github.com/nalgeon/howto"), "for details.")
+	fprintln(out)
+	fprintln(out, "Options:")
+	fprintln(out, "  -h, --help      Show this help message and exit")
+	fprintln(out, "  -v, --version   Show version information and exit")
+	fprintln(out, "  -run            Run the last suggested command")
+	fprintln(out, "  question        Describe the task to get a command suggestion")
+	fprintln(out, "                  Use '+' to ask a follow up question")
 }
 
 // printVersion prints version, configuration, and history information.
 func printVersion(out io.Writer, ver Version, config ai.Config, history *History) {
-	fmt.Fprintln(out, bold("howto"), ver.String())
-	fmt.Fprintln(out)
-	fmt.Fprintln(out, bold("## Config"))
-	fmt.Fprintln(out, "- Vendor:", config.Vendor)
-	fmt.Fprintln(out, "- URL:", config.URL)
+	fprintln(out, bold("howto"), ver.String())
+	fprintln(out)
+	fprintln(out, bold("## Config"))
+	fprintln(out, "- Vendor:", config.Vendor)
+	fprintln(out, "- URL:", config.URL)
 	if config.Token == "" {
-		fmt.Fprintln(out, "- Token: (empty)")
+		fprintln(out, "- Token: (empty)")
 	} else {
-		fmt.Fprintln(out, "- Token: ***")
+		fprintln(out, "- Token: ***")
 	}
-	fmt.Fprintln(out, "- Model:", config.Model)
-	fmt.Fprintln(out, "- Temperature:", config.Temperature)
-	fmt.Fprintln(out, "- Timeout:", config.Timeout)
-	fmt.Fprintln(out)
-	fmt.Fprintln(out, bold("## Prompt"))
+	fprintln(out, "- Model:", config.Model)
+	fprintln(out, "- Temperature:", config.Temperature)
+	fprintln(out, "- Timeout:", config.Timeout)
+	fprintln(out)
+	fprintln(out, bold("## Prompt"))
 	printWrapped(out, config.Prompt, 80)
-	fmt.Fprintln(out)
-	fmt.Fprintln(out, bold("## History"))
+	fprintln(out)
+	fprintln(out, bold("## History"))
 	history.Print(out)
 }
 
@@ -70,8 +70,12 @@ func printWrapped(out io.Writer, s string, width int) {
 				lineLen = wordLen
 			}
 		}
-		fmt.Fprintln(out, text.String())
+		fprintln(out, text.String())
 	}
+}
+
+func fprintln(out io.Writer, args ...any) {
+	_, _ = fmt.Fprintln(out, args...)
 }
 
 func bold(s string) string {

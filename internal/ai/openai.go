@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-var errMissingToken = fmt.Errorf(`Set HOWTO_AI_TOKEN to your AI vendor API key.
+var errMissingToken = fmt.Errorf(`set HOWTO_AI_TOKEN to your AI vendor API key.
 See https://github.com/nalgeon/howto#readme for details`)
 
 // oaiRequest represents the request sent to the OpenAI-compatible API.
