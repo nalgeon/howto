@@ -22,8 +22,8 @@ jobs:
               with:
                   go-version-file: "go.mod"
 
+            - name: Install linter
+              uses: golangci/golangci-lint-action@v8
+
             - name: Build and Test
-              run: |
-                  go get .
-                  go build -v .
-                  go test -v ./...
+              run: make all

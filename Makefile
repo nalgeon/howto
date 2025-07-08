@@ -1,12 +1,17 @@
-.PHONY: build
+all: build lint vet test
+
 build:
 	@go build -o howto
+	@echo "✓ build"
 
-.PHONY: test
+lint:
+	@golangci-lint run ./...
+	@echo "✓ lint"
+
 test:
 	@go test ./...
+	@echo "✓ test"
 
-.PHONY: lint
-lint:
+vet:
 	@go vet ./...
-	@golangci-lint run --print-issued-lines=false --out-format=colored-line-number ./...
+	@echo "✓ vet"

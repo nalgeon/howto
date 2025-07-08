@@ -3,8 +3,7 @@ name: publish
 on:
     push:
         tags:
-            - "*"
-    workflow_dispatch:
+            - "v*.*.*"
 
 permissions:
     contents: write
